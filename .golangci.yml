@@ -1,0 +1,41 @@
+linters:
+  enable:
+    - goimports
+    - gofumpt
+    - staticcheck
+    - gocyclo
+    - unparam
+    - errcheck
+
+linters-settings:
+  goimports:
+    local-prefixes: github.com/armineyvazi/framework.git
+  golint:
+    min-confidence: 0.8
+  errcheck:
+    check-shadow: true
+
+#issues:
+#  exclude-rules:
+#    - path: _/vendor
+#  exclude:
+#    - rules:
+#        - unused
+
+run:
+  goimports:
+    - ./...
+  gofumpt:
+    - ./...
+  go vet:
+    - ./...
+  golint:
+    - ./...
+  staticcheck:
+    - ./...
+  unparam:
+    - ./...
+  errcheck:
+    - ./...
+  gotestsum:
+    - ./...

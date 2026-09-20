@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	_ "github.com/go-sql-driver/mysql" // registers the "mysql" driver for database/sql
+	gomysql "github.com/go-sql-driver/mysql" // registers the "mysql" driver for database/sql
 
 	"github.com/armineyvazi/common.git/pkg/ports"
 )
@@ -36,11 +36,21 @@ func NewSQL(dsn string, cfg MySQLSQLConfig) ports.SQLDatabase {
 	return &sqlMysqlDB{dsn: dsn, cfg: cfg}
 }
 
-// NewSQLFromParts constructs a DSN from individual parameters.
+// NewSQLFromParts constructs a DSN using mysql.Config.FormatDSN so that
+// special characters in user, password, or host are escaped safely.
+// charset is the connection charset, e.g. "utf8mb4".
 func NewSQLFromParts(host, database, user, password, charset string, cfg MySQLSQLConfig) ports.SQLDatabase {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=%s&parseTime=True&loc=Local",
-		user, password, host, database, charset)
-	return NewSQL(dsn, cfg)
+	driverCfg := gomysql.Config{
+		User:      user,
+		Passwd:    password,
+		Net:       "tcp",
+		Addr:      host,
+		DBName:    database,
+		Params:    map[string]string{"charset": charset},
+		ParseTime: true,
+		Loc:       time.Local,
+	}
+	return NewSQL(driverCfg.FormatDSN(), cfg)
 }
 
 func (s *sqlMysqlDB) connect() {

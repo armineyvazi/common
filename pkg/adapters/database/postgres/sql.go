@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"net/url"
 	"sync"
 	"time"
 
@@ -18,6 +19,11 @@ type SQLConfig struct {
 	MaxOpenConns    int
 	ConnMaxLifetime time.Duration
 	ConnMaxIdleTime time.Duration
+	// SSLMode is the PostgreSQL sslmode parameter.
+	// Accepted values: "disable", "allow", "prefer", "require",
+	// "verify-ca", "verify-full". Defaults to "prefer" when empty.
+	// Use "require" or "verify-full" for production deployments.
+	SSLMode string
 }
 
 type sqlDatabase struct {
@@ -29,21 +35,31 @@ type sqlDatabase struct {
 }
 
 // NewSQL returns a ports.SQLDatabase backed by pgx via database/sql.
-// The DSN must be a valid PostgreSQL connection string, e.g.
+// The DSN must be a valid PostgreSQL connection string or URL, e.g.
 //
-//	"host=localhost user=app password=secret dbname=mydb port=5432 sslmode=disable"
+//	"postgres://user:secret@host:5432/dbname?sslmode=require"
 func NewSQL(dsn string, cfg SQLConfig) ports.SQLDatabase {
 	return &sqlDatabase{dsn: dsn, cfg: cfg}
 }
 
-// NewSQLFromParts constructs a DSN from individual parameters and returns
-// a ports.SQLDatabase. Prefer NewSQL when you already manage DSN strings.
+// NewSQLFromParts constructs a DSN from individual parameters using URL
+// encoding so that special characters in user, password, or host are
+// handled safely. Prefer NewSQL when you already manage DSN strings.
 func NewSQLFromParts(host, database, user, password string, port int, cfg SQLConfig) ports.SQLDatabase {
-	dsn := fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s port=%d sslmode=disable",
-		host, user, password, database, port,
-	)
-	return NewSQL(dsn, cfg)
+	sslMode := cfg.SSLMode
+	if sslMode == "" {
+		sslMode = "prefer"
+	}
+	u := &url.URL{
+		Scheme: "postgres",
+		User:   url.UserPassword(user, password),
+		Host:   fmt.Sprintf("%s:%d", host, port),
+		Path:   "/" + database,
+	}
+	q := u.Query()
+	q.Set("sslmode", sslMode)
+	u.RawQuery = q.Encode()
+	return NewSQL(u.String(), cfg)
 }
 
 func (s *sqlDatabase) connect() {

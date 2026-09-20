@@ -15,16 +15,16 @@ var ErrorMessagesMap = map[ErrorType]ErrorMessage{
 }
 
 const (
-	InternalErrorMessage    ErrorMessage = "خطای سیستم"
-	BadRequestMessage       ErrorMessage = "خطای ورودی"
-	NotFoundMessage         ErrorMessage = "پیدا نشد"
-	DuplicatedMessage       ErrorMessage = "داده تکراری‌ است" //nolint:staticcheck // ST1018: ZWNJ is intentional Farsi typography
-	UnprocessableMessage    ErrorMessage = "قابل پردازش نیست"
-	PermissionDeniedMessage ErrorMessage = "دسترسی غیر مجاز"
-	UnauthenticatedMessage  ErrorMessage = "کاربر احراز هویت نشده است"
-	UnauthorizedMessage     ErrorMessage = "عدم دسترسی مجاز"
-	InvalidArgumentMessage  ErrorMessage = "داده معتبر نیست"
-	TypeTooManyMessage      ErrorMessage = "تعداد درخواست‌ها بیش از حد مجاز است" //nolint:staticcheck // ST1018: ZWNJ is intentional Farsi typography
+	InternalErrorMessage    ErrorMessage = "internal server error"
+	BadRequestMessage       ErrorMessage = "bad request"
+	NotFoundMessage         ErrorMessage = "not found"
+	DuplicatedMessage       ErrorMessage = "duplicate entry"
+	UnprocessableMessage    ErrorMessage = "unprocessable entity"
+	PermissionDeniedMessage ErrorMessage = "permission denied"
+	UnauthenticatedMessage  ErrorMessage = "unauthenticated"
+	UnauthorizedMessage     ErrorMessage = "unauthorized"
+	InvalidArgumentMessage  ErrorMessage = "invalid argument"
+	TypeTooManyMessage      ErrorMessage = "too many requests"
 )
 
 type ErrorMessage = string

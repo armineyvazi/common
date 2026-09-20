@@ -194,5 +194,5 @@ type AppError interface {
 	WithDisableDebug() AppError
 	WithErrorList(fieldName, errorMessage string) AppError
 
-	Is(errType ErrorType) bool //nolint:govet // intentional domain method, not errors.Is sentinel
+	IsType(errType ErrorType) bool
 }

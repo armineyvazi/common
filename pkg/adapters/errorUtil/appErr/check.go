@@ -2,13 +2,13 @@ package appErr
 
 import "github.com/armineyvazi/common.git/pkg/ports"
 
-func (e *appErr) Is(errType ports.ErrorType) bool { //nolint:govet // intentional domain method, not errors.Is sentinel
+func (e *appErr) IsType(errType ports.ErrorType) bool {
 	return e.GetType() == errType
 }
 
 func IsErrorType(err error, errType ports.ErrorType) bool {
 	if e, ok := err.(ports.AppError); ok {
-		return e.Is(errType)
+		return e.IsType(errType)
 	}
 	return false
 }

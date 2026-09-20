@@ -6,8 +6,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/golang-jwt/jwt/v5"
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 func decodeToken(c *fiber.Ctx, publicKey *rsa.PublicKey) (*jwt.MapClaims, error) {

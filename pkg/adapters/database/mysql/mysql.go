@@ -70,7 +70,7 @@ func (m *Mysql) ServiceName() string {
 func (m *Mysql) IsHealthy(ctx context.Context) bool {
 	m.GetConnection(ctx)
 	db, err := m.db.DB()
-	return err == nil && db.Ping() == nil
+	return err == nil && db.PingContext(ctx) == nil
 }
 
 func (m *Mysql) Close() error {

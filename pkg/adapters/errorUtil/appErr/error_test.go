@@ -54,7 +54,7 @@ func TestWithTrackId_GeneratedWhenMissing(t *testing.T) {
 func TestWithTrackId_NotOverwritten(t *testing.T) {
 	ctx := context.WithValue(context.Background(), ports.TraceID{}, "first-id")
 	e := New(nil).WithTrackId(ctx)
-	e.WithTrackId(context.WithValue(context.Background(), ports.TraceID{}, "second-id"))
+	_ = e.WithTrackId(context.WithValue(context.Background(), ports.TraceID{}, "second-id"))
 	if e.GetTrackId() != "first-id" {
 		t.Errorf("track id should not be overwritten: got %q", e.GetTrackId())
 	}
@@ -94,7 +94,7 @@ func TestIsDebugDisabled(t *testing.T) {
 	if e.IsDebugDisabled() {
 		t.Error("debug should be enabled by default")
 	}
-	e.WithDisableDebug()
+	_ = e.WithDisableDebug()
 	if !e.IsDebugDisabled() {
 		t.Error("debug should be disabled after WithDisableDebug")
 	}

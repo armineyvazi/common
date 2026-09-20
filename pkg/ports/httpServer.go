@@ -28,8 +28,8 @@ const (
 	StatusMethodNotAllowed    HttpStatus = http.StatusMethodNotAllowed
 	StatusRequestTimeout      HttpStatus = http.StatusRequestTimeout
 	StatusPreConditionFailed  HttpStatus = http.StatusPreconditionFailed
-	StatusTooManyRequests     HttpStatus = http.StatusTooManyRequests  //429
-	StatusFailedDependency    HttpStatus = http.StatusFailedDependency //424
+	StatusTooManyRequests     HttpStatus = http.StatusTooManyRequests  // 429
+	StatusFailedDependency    HttpStatus = http.StatusFailedDependency // 424
 	StatusInternalServerError HttpStatus = http.StatusInternalServerError
 	StatusBadGateway          HttpStatus = http.StatusBadGateway
 	StatusServiceUnavailable  HttpStatus = http.StatusServiceUnavailable

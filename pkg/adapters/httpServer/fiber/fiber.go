@@ -7,18 +7,18 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gofiber/fiber/v2/middleware/pprof"
-	"github.com/gofiber/template/html/v2"
 	app_err "github.com/armineyvazi/common.git/pkg/adapters/errorUtil/appErr"
 	"github.com/armineyvazi/common.git/pkg/adapters/errorUtil/httpError"
+	"github.com/gofiber/fiber/v2/middleware/pprof"
+	"github.com/gofiber/template/html/v2"
 
+	"github.com/armineyvazi/common.git/pkg/adapters/httpServer/fiber/middleware/jwt"
+	"github.com/armineyvazi/common.git/pkg/ports"
 	sentryfiber "github.com/getsentry/sentry-go/fiber"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/swagger"
-	"github.com/armineyvazi/common.git/pkg/adapters/httpServer/fiber/middleware/jwt"
-	"github.com/armineyvazi/common.git/pkg/ports"
 	"go.elastic.co/apm/module/apmfiber/v2"
 )
 
@@ -31,7 +31,6 @@ type View struct {
 
 type FiberHttpServer struct {
 	app     *fiber.App
-	debug   bool
 	sentry  ports.ErrorHandler
 	address string
 	uuidGen ports.UUID

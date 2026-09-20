@@ -18,7 +18,7 @@ func TestNewViper_ReadsYAML(t *testing.T) {
 	if err != nil {
 		t.Fatalf("create temp file: %v", err)
 	}
-	defer f.Close()
+	defer func() { _ = f.Close() }()
 
 	content := "app_name: myapp\nport: 8080\n"
 	if _, err := f.WriteString(content); err != nil {
@@ -43,7 +43,7 @@ func TestNewViper_EnvOverride(t *testing.T) {
 	if err != nil {
 		t.Fatalf("create temp file: %v", err)
 	}
-	defer f.Close()
+	defer func() { _ = f.Close() }()
 
 	_, _ = f.WriteString("port: 3000\n")
 

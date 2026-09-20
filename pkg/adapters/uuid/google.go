@@ -1,8 +1,8 @@
 package uuid
 
 import (
-	"github.com/google/uuid"
 	"github.com/armineyvazi/common.git/pkg/ports"
+	"github.com/google/uuid"
 )
 
 type google struct{}

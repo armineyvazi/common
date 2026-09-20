@@ -18,13 +18,13 @@ const (
 	InternalErrorMessage    ErrorMessage = "خطای سیستم"
 	BadRequestMessage       ErrorMessage = "خطای ورودی"
 	NotFoundMessage         ErrorMessage = "پیدا نشد"
-	DuplicatedMessage       ErrorMessage = "داده تکراری‌ است"
+	DuplicatedMessage       ErrorMessage = "داده تکراری‌ است" //nolint:staticcheck // ST1018: ZWNJ is intentional Farsi typography
 	UnprocessableMessage    ErrorMessage = "قابل پردازش نیست"
 	PermissionDeniedMessage ErrorMessage = "دسترسی غیر مجاز"
 	UnauthenticatedMessage  ErrorMessage = "کاربر احراز هویت نشده است"
 	UnauthorizedMessage     ErrorMessage = "عدم دسترسی مجاز"
 	InvalidArgumentMessage  ErrorMessage = "داده معتبر نیست"
-	TypeTooManyMessage      ErrorMessage = "تعداد درخواست‌ها بیش از حد مجاز است"
+	TypeTooManyMessage      ErrorMessage = "تعداد درخواست‌ها بیش از حد مجاز است" //nolint:staticcheck // ST1018: ZWNJ is intentional Farsi typography
 )
 
 type ErrorMessage = string
@@ -194,5 +194,5 @@ type AppError interface {
 	WithDisableDebug() AppError
 	WithErrorList(fieldName, errorMessage string) AppError
 
-	Is(errType ErrorType) bool
+	Is(errType ErrorType) bool //nolint:govet // intentional domain method, not errors.Is sentinel
 }

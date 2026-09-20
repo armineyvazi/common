@@ -78,7 +78,8 @@ func (s *grpcServer) Register(desc any, impl any) {
 
 // Listen binds to addr and blocks until the server stops.
 func (s *grpcServer) Listen(addr string) error {
-	ln, err := net.Listen("tcp", addr)
+	lc := net.ListenConfig{}
+	ln, err := lc.Listen(context.Background(), "tcp", addr)
 	if err != nil {
 		return fmt.Errorf("grpc listen %s: %w", addr, err)
 	}

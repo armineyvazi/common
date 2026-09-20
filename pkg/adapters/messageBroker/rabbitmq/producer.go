@@ -24,7 +24,7 @@ func NewProducer(dsn string) (ports.MessageProducer, error) {
 	}
 	ch, err := conn.Channel()
 	if err != nil {
-		conn.Close()
+		_ = conn.Close()
 		return nil, fmt.Errorf("rabbitmq open channel: %w", err)
 	}
 	return &producer{conn: conn, ch: ch}, nil

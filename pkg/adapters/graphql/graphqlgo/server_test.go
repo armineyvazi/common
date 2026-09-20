@@ -2,6 +2,7 @@ package graphqlgo_test
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -24,7 +25,7 @@ func TestNew_HandlerResponds(t *testing.T) {
 	srv := graphqlgo.New(testSchema, &helloResolver{}, graphqlgo.Config{})
 
 	body, _ := json.Marshal(map[string]string{"query": `{ hello }`})
-	req := httptest.NewRequest(http.MethodPost, "/graphql", bytes.NewReader(body))
+	req := httptest.NewRequestWithContext(context.Background(), http.MethodPost, "/graphql", bytes.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
 	rec := httptest.NewRecorder()
 

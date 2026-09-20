@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	gojwt "github.com/golang-jwt/jwt/v5"
 	"github.com/gofiber/fiber/v2"
+	gojwt "github.com/golang-jwt/jwt/v5"
 	"github.com/valyala/fasthttp"
 )
 

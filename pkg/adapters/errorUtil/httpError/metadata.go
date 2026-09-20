@@ -4,8 +4,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gofiber/fiber/v2"
 	"github.com/armineyvazi/common.git/pkg/ports"
+	"github.com/gofiber/fiber/v2"
 )
 
 const (

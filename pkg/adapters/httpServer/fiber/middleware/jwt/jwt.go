@@ -4,9 +4,9 @@ import (
 	"crypto/rsa"
 	"fmt"
 
-	"github.com/gofiber/fiber/v2"
 	"github.com/armineyvazi/common.git/pkg/adapters/errorUtil/appErr"
 	"github.com/armineyvazi/common.git/pkg/ports"
+	"github.com/gofiber/fiber/v2"
 )
 
 func New(publicKeyString string) fiber.Handler {

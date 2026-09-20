@@ -67,7 +67,10 @@ type BaseConfig struct {
 	SSLCertLocation           string // path to client certificate file
 	SSLKeyLocation            string // path to client private key file
 	SSLKeyPassword            string
-	EnableSSLCertVerification bool // set false only in development
+	// DisableSSLCertVerification skips broker certificate verification.
+	// Set true only in development or when using self-signed certificates.
+	// The default (false) leaves librdkafka's secure default (verification on) intact.
+	DisableSSLCertVerification bool
 
 	// SocketTimeoutMs is the TCP socket timeout in milliseconds. Default 60000.
 	SocketTimeoutMs int
@@ -229,7 +232,7 @@ func buildBaseConfigMap(b BaseConfig) kafka.ConfigMap {
 	if b.SSLKeyPassword != "" {
 		cm["ssl.key.password"] = b.SSLKeyPassword
 	}
-	if !b.EnableSSLCertVerification {
+	if b.DisableSSLCertVerification {
 		cm["enable.ssl.certificate.verification"] = false
 	}
 	if b.SocketTimeoutMs > 0 {

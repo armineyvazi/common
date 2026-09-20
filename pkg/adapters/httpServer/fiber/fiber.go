@@ -117,7 +117,7 @@ func New(debug bool, address string, uuidGen ports.UUID, sentry ports.ErrorHandl
 				}
 
 				// create a formal error if error is not formal
-				return ctx.Status(ports.InternalErrorCode).JSON(ports.ErrorDetails{
+				return ctx.Status(ports.StatusInternalServerError).JSON(ports.ErrorDetails{
 					Status:      false,
 					Message:     ports.InternalErrorMessage,
 					Code:        ports.InternalErrorCode,

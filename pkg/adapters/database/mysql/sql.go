@@ -18,6 +18,11 @@ type MySQLSQLConfig struct {
 	MaxOpenConns    int
 	ConnMaxLifetime time.Duration
 	ConnMaxIdleTime time.Duration
+	// TLSConfig controls TLS for the connection.
+	// Accepted values: "true" (verify cert, default), "skip-verify" (encrypt only),
+	// "false" (no TLS, local dev only), or a name registered via mysql.RegisterTLSConfig.
+	// Defaults to "true" when empty — system CA pool verification.
+	TLSConfig string
 }
 
 type sqlMysqlDB struct {
@@ -40,6 +45,10 @@ func NewSQL(dsn string, cfg MySQLSQLConfig) ports.SQLDatabase {
 // special characters in user, password, or host are escaped safely.
 // charset is the connection charset, e.g. "utf8mb4".
 func NewSQLFromParts(host, database, user, password, charset string, cfg MySQLSQLConfig) ports.SQLDatabase {
+	tlsCfg := cfg.TLSConfig
+	if tlsCfg == "" {
+		tlsCfg = "true" // verify server cert against system CA pool
+	}
 	driverCfg := gomysql.Config{
 		User:      user,
 		Passwd:    password,
@@ -49,6 +58,7 @@ func NewSQLFromParts(host, database, user, password, charset string, cfg MySQLSQ
 		Params:    map[string]string{"charset": charset},
 		ParseTime: true,
 		Loc:       time.Local,
+		TLSConfig: tlsCfg,
 	}
 	return NewSQL(driverCfg.FormatDSN(), cfg)
 }

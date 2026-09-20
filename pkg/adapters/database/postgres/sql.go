@@ -21,8 +21,8 @@ type SQLConfig struct {
 	ConnMaxIdleTime time.Duration
 	// SSLMode is the PostgreSQL sslmode parameter.
 	// Accepted values: "disable", "allow", "prefer", "require",
-	// "verify-ca", "verify-full". Defaults to "prefer" when empty.
-	// Use "require" or "verify-full" for production deployments.
+	// "verify-ca", "verify-full". Defaults to "require" when empty.
+	// Set to "disable" only for local development; never in production.
 	SSLMode string
 }
 
@@ -48,7 +48,7 @@ func NewSQL(dsn string, cfg SQLConfig) ports.SQLDatabase {
 func NewSQLFromParts(host, database, user, password string, port int, cfg SQLConfig) ports.SQLDatabase {
 	sslMode := cfg.SSLMode
 	if sslMode == "" {
-		sslMode = "prefer"
+		sslMode = "require"
 	}
 	u := &url.URL{
 		Scheme: "postgres",

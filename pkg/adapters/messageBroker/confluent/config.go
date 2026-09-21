@@ -63,10 +63,10 @@ type BaseConfig struct {
 	SASLPassword  string
 
 	// SSL/TLS fields. Only used when SecurityProtocol is SSL or SASL_SSL.
-	SSLCALocation             string // path to CA certificate file
-	SSLCertLocation           string // path to client certificate file
-	SSLKeyLocation            string // path to client private key file
-	SSLKeyPassword            string
+	SSLCALocation   string // path to CA certificate file
+	SSLCertLocation string // path to client certificate file
+	SSLKeyLocation  string // path to client private key file
+	SSLKeyPassword  string
 	// DisableSSLCertVerification skips broker certificate verification.
 	// Set true only in development or when using self-signed certificates.
 	// The default (false) leaves librdkafka's secure default (verification on) intact.

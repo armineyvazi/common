@@ -34,8 +34,6 @@ func (t *task) worker() {
 			job.ResultChannel <- res
 		}
 	}
-
-	panic("worker is dead :(")
 }
 
 func (nw *NativeWorkerpool) RegisterTask(taskName string, handler func(job ports.JobRequest) ports.TaskResult, concurrency int, queueLength int) {

@@ -13,7 +13,7 @@ type httpErr struct {
 }
 
 func (e *httpErr) MarshalJSON() ([]byte, error) {
-	errorListMap := e.AppError.GetErrorLists()
+	errorListMap := e.AppError.GetErrorLists() //nolint:staticcheck // QF1008: explicit for clarity with embedded interface
 	errorList := make([]struct {
 		FieldName string   `json:"field_name"`
 		Errors    []string `json:"errors"`
@@ -36,9 +36,9 @@ func (e *httpErr) MarshalJSON() ([]byte, error) {
 		Status  bool        `json:"status"`
 		Errors  interface{} `json:"errors"`
 	}{
-		Code:    e.AppError.GetCode(),
-		Message: e.AppError.GetMessage(),
-		TrackID: e.AppError.GetTrackId(),
+		Code:    e.AppError.GetCode(),    //nolint:staticcheck // QF1008: explicit for clarity
+		Message: e.AppError.GetMessage(), //nolint:staticcheck // QF1008: explicit for clarity
+		TrackID: e.AppError.GetTrackId(), //nolint:staticcheck // QF1008: explicit for clarity
 		Status:  false,
 		Errors:  errorList,
 	})

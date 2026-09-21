@@ -1,8 +1,8 @@
 package appErr
 
 import (
-	"github.com/gofiber/fiber/v2"
 	"github.com/armineyvazi/common.git/pkg/ports"
+	"github.com/gofiber/fiber/v2"
 )
 
 func NewInternalErr(err error) ports.AppError {

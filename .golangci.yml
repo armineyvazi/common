@@ -1,41 +1,54 @@
+version: "2"
+
 linters:
+  default: none
   enable:
-    - goimports
-    - gofumpt
+    - errcheck
+    - govet
     - staticcheck
     - gocyclo
     - unparam
-    - errcheck
+    - ineffassign
+    - unused
+    - bodyclose
+    - noctx
+    - gocritic
+    - misspell
 
-linters-settings:
-  goimports:
-    local-prefixes: github.com/armineyvazi/framework.git
-  golint:
-    min-confidence: 0.8
+settings:
+  gocyclo:
+    min-complexity: 15
+  gocritic:
+    disabled-checks:
+      - appendAssign
   errcheck:
-    check-shadow: true
+    check-type-assertions: false
+    check-blank: false
 
-#issues:
-#  exclude-rules:
-#    - path: _/vendor
-#  exclude:
-#    - rules:
-#        - unused
+issues:
+  exclusions:
+    rules:
+      # Test helpers: relax errcheck, unparam, and noctx in _test.go files.
+      - path: ".*_test\\.go$"
+        linters:
+          - errcheck
+          - unparam
+          - noctx
 
-run:
-  goimports:
-    - ./...
-  gofumpt:
-    - ./...
-  go vet:
-    - ./...
-  golint:
-    - ./...
-  staticcheck:
-    - ./...
-  unparam:
-    - ./...
-  errcheck:
-    - ./...
-  gotestsum:
-    - ./...
+      # The ports.AppError interface defines Is(ErrorType) as a domain method,
+      # not the stdlib errors.Is sentinel. Renaming it breaks the public API.
+      - linters:
+          - govet
+        text: "method Is\\("
+
+      # QF1008: "could remove embedded field from selector" — pre-existing
+      # style; safe to suppress until a refactor pass.
+      - linters:
+          - staticcheck
+        text: "QF1008"
+
+      # ST1018: Persian string literals with Unicode invisible characters are
+      # intentional (zero-width non-joiner in Farsi typography).
+      - linters:
+          - staticcheck
+        text: "ST1018"

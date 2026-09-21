@@ -6,14 +6,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 func decodeToken(c *fiber.Ctx, publicKey *rsa.PublicKey) (*jwt.MapClaims, error) {
-	var token *jwt.Token
-	var err error
-
 	authHeader := c.Get(fiber.HeaderAuthorization)
 	if authHeader == "" {
 		return nil, fmt.Errorf("authorization header is required")
@@ -28,9 +25,10 @@ func decodeToken(c *fiber.Ctx, publicKey *rsa.PublicKey) (*jwt.MapClaims, error)
 		return nil, fmt.Errorf("token is not Bearer type")
 	}
 
+	claims := jwt.MapClaims{}
+
 	if publicKey != nil {
-		token, err = jwt.Parse(tokenParts[1], func(token *jwt.Token) (interface{}, error) {
-			// Check that the signing method is RSA
+		_, err := jwt.ParseWithClaims(tokenParts[1], claims, func(token *jwt.Token) (interface{}, error) {
 			if _, ok := token.Method.(*jwt.SigningMethodRSA); !ok {
 				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 			}
@@ -39,24 +37,23 @@ func decodeToken(c *fiber.Ctx, publicKey *rsa.PublicKey) (*jwt.MapClaims, error)
 		if err != nil {
 			return nil, err
 		}
-		if !token.Valid {
-			return nil, fmt.Errorf("invalid token")
-		}
-
 	} else {
-		token, _, err = new(jwt.Parser).ParseUnverified(tokenParts[1], jwt.MapClaims{})
+		token, _, err := jwt.NewParser().ParseUnverified(tokenParts[1], claims)
 		if err != nil {
 			return nil, err
 		}
-	}
+		mc, ok := token.Claims.(jwt.MapClaims)
+		if !ok {
+			return nil, fmt.Errorf("invalid token claims")
+		}
+		claims = mc
 
-	claims, ok := token.Claims.(jwt.MapClaims)
-	if !ok {
-		return nil, fmt.Errorf("invalid token")
-	}
-
-	if expiresAt, ok := claims["exp"]; ok && int64(expiresAt.(float64)) < time.Now().UTC().Unix() {
-		return nil, fmt.Errorf("token is expired")
+		// Manually check expiry since signature is not verified.
+		if exp, err := claims.GetExpirationTime(); err == nil && exp != nil {
+			if exp.Before(time.Now()) {
+				return nil, fmt.Errorf("token is expired")
+			}
+		}
 	}
 
 	return &claims, nil
@@ -69,6 +66,5 @@ func extractUserId(c *fiber.Ctx, claims *jwt.MapClaims) error {
 		id := (*claims)["id"]
 		c.Locals("guest_id", id)
 	}
-
 	return c.Next()
 }

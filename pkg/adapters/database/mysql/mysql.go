@@ -39,29 +39,27 @@ func createDSN(host, database, user, password, charset string) string {
 }
 
 func (m *Mysql) GetConnection(ctx context.Context) *gorm.DB {
-	if m.db == nil {
-		m.dbConnOnce.Do(func() {
-			var err error
-			m.db, err = gorm.Open(mysql.Open(m.address), &gorm.Config{
-				PrepareStmt: m.config.PrepareStmt,
-				NowFunc: func() time.Time {
-					ti, _ := time.LoadLocation("Asia/Tehran")
-					return time.Now().In(ti)
-				},
-			})
-			if err != nil {
-				panic(err)
-			}
-
-			db, err := m.db.DB()
-			if err != nil {
-				panic(err)
-			}
-			db.SetMaxIdleConns(10)
-			db.SetMaxOpenConns(25)
-			db.SetConnMaxLifetime(time.Hour)
+	m.dbConnOnce.Do(func() {
+		var err error
+		m.db, err = gorm.Open(mysql.Open(m.address), &gorm.Config{
+			PrepareStmt: m.config.PrepareStmt,
+			NowFunc: func() time.Time {
+				ti, _ := time.LoadLocation("Asia/Tehran")
+				return time.Now().In(ti)
+			},
 		})
-	}
+		if err != nil {
+			panic(fmt.Errorf("open mysql: %w", err))
+		}
+
+		db, err := m.db.DB()
+		if err != nil {
+			panic(fmt.Errorf("get mysql db: %w", err))
+		}
+		db.SetMaxIdleConns(10)
+		db.SetMaxOpenConns(25)
+		db.SetConnMaxLifetime(time.Hour)
+	})
 	return m.db.WithContext(ctx)
 }
 
@@ -72,7 +70,7 @@ func (m *Mysql) ServiceName() string {
 func (m *Mysql) IsHealthy(ctx context.Context) bool {
 	m.GetConnection(ctx)
 	db, err := m.db.DB()
-	return err == nil && db.Ping() == nil
+	return err == nil && db.PingContext(ctx) == nil
 }
 
 func (m *Mysql) Close() error {

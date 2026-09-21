@@ -1,2 +1,42 @@
-.idea
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
 .DS_Store
+Thumbs.db
+
+# Build artifacts
+*.o
+*.a
+*.so
+dist/
+bin/
+
+# Test output
+*.test
+*.prof
+coverage.out
+coverage.html
+
+# Security: never commit keys
+*.pem
+*.key
+*.p12
+*.pfx
+public.pem
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# AI/agent artifacts
+.claude/
+CLAUDE.md
+.cursor/
+.cursorrules
+.ai/
+*.prompt

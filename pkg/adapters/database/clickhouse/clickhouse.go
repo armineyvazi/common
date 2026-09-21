@@ -38,35 +38,33 @@ func createDSN(host, database, user, password string, port int) string {
 }
 
 func (c *ClickHouse) GetConnection(ctx context.Context) *gorm.DB {
-	if c.db == nil {
-		c.dbConnOnce.Do(func() {
-			var err error
-			c.db, err = gorm.Open(clickhouse.Open(c.address), &gorm.Config{
-				PrepareStmt: c.config.PrepareStmt,
-				NowFunc: func() time.Time {
-					ti, _ := time.LoadLocation("Asia/Tehran")
-					return time.Now().In(ti)
-				},
-			})
-			if err != nil {
-				panic(err)
-			}
-
-			db, err := c.db.DB()
-			if err != nil {
-				panic(err)
-			}
-			if c.config.MaxIdleConns > 0 {
-				db.SetMaxIdleConns(c.config.MaxIdleConns)
-			}
-			if c.config.MaxOpenConns > 0 {
-				db.SetMaxOpenConns(c.config.MaxOpenConns)
-			}
-			if c.config.ConnMaxLifetime > 0 {
-				db.SetConnMaxLifetime(c.config.ConnMaxLifetime)
-			}
+	c.dbConnOnce.Do(func() {
+		var err error
+		c.db, err = gorm.Open(clickhouse.Open(c.address), &gorm.Config{
+			PrepareStmt: c.config.PrepareStmt,
+			NowFunc: func() time.Time {
+				ti, _ := time.LoadLocation("Asia/Tehran")
+				return time.Now().In(ti)
+			},
 		})
-	}
+		if err != nil {
+			panic(fmt.Errorf("open clickhouse: %w", err))
+		}
+
+		db, err := c.db.DB()
+		if err != nil {
+			panic(fmt.Errorf("get clickhouse db: %w", err))
+		}
+		if c.config.MaxIdleConns > 0 {
+			db.SetMaxIdleConns(c.config.MaxIdleConns)
+		}
+		if c.config.MaxOpenConns > 0 {
+			db.SetMaxOpenConns(c.config.MaxOpenConns)
+		}
+		if c.config.ConnMaxLifetime > 0 {
+			db.SetConnMaxLifetime(c.config.ConnMaxLifetime)
+		}
+	})
 	return c.db.WithContext(ctx)
 }
 

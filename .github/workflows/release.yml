@@ -52,10 +52,15 @@ jobs:
           echo "notes_file=/tmp/release_notes.md" >> "$GITHUB_OUTPUT"
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          body_path: ${{ steps.changelog.outputs.notes_file }}
-          prerelease: ${{ contains(github.ref_name, '-') }}
-          generate_release_notes: false
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          PRERELEASE_FLAG=""
+          if echo "${TAG}" | grep -q '-'; then
+            PRERELEASE_FLAG="--prerelease"
+          fi
+          gh release create "${TAG}" \
+            --title "${TAG}" \
+            --notes-file /tmp/release_notes.md \
+            ${PRERELEASE_FLAG}

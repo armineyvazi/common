@@ -21,9 +21,8 @@ func ExampleNew() {
 	)
 	defer db.Close()
 
-	// Adapter satisfies both ports.Database and ports.GORMMigrator.
+	// Adapter satisfies ports.Database (GORMMigrator embeds it).
 	var _ ports.Database = db
-	var _ ports.GORMMigrator = db
 
 	type User struct {
 		ID    uint   `gorm:"primaryKey"`

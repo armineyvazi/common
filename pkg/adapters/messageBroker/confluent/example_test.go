@@ -91,7 +91,7 @@ func ExampleNewConsumer() {
 		fmt.Println("new consumer:", err)
 		return
 	}
-	defer c.Close()
+	defer func() { _ = c.Close() }()
 
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
@@ -129,7 +129,7 @@ func ExampleNewConsumer_manualCommit() {
 		fmt.Println("new consumer:", err)
 		return
 	}
-	defer c.Close()
+	defer func() { _ = c.Close() }()
 
 	// After processing a kafka.Message, commit its offset explicitly:
 	//   if err := c.CommitMessage(msg); err != nil { ... }

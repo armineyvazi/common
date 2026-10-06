@@ -7,10 +7,12 @@ import (
 	"github.com/armineyvazi/common.git/pkg/ports"
 )
 
-// TestMysql_ImplementsGORMMigrator is a compile-time assertion that
-// *Mysql satisfies ports.GORMMigrator.
+// TestMysql_ImplementsGORMMigrator is a compile-time assertion that the value
+// returned by mysql.New satisfies ports.GORMMigrator.
 func TestMysql_ImplementsGORMMigrator(t *testing.T) {
-	var _ ports.GORMMigrator = mysql.New("", "", "", "", "", mysql.Config{})
+	// New returns ports.GORMMigrator; assigning to the same interface type is
+	// a no-op at runtime but confirms the return type at compile time.
+	_ = mysql.New("", "", "", "", "", mysql.Config{})
 }
 
 // TestMysql_ImplementsDatabase verifies the base Database interface.

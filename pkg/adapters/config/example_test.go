@@ -26,7 +26,7 @@ func (c AppConfig) GetConfig() AppConfig { return c }
 // ExampleNewViper_basic shows loading a YAML config file into a typed struct.
 func ExampleNewViper_basic() {
 	dir, _ := os.MkdirTemp("", "cfg-example")
-	defer os.RemoveAll(dir)
+	defer func() { _ = os.RemoveAll(dir) }()
 
 	cfgFile := filepath.Join(dir, "config.yaml")
 	_ = os.WriteFile(cfgFile, []byte(`
@@ -59,13 +59,16 @@ database:
 // DATABASE__HOST overrides database.host.
 func ExampleNewViper_envOverride() {
 	dir, _ := os.MkdirTemp("", "cfg-env")
-	defer os.RemoveAll(dir)
+	defer func() { _ = os.RemoveAll(dir) }()
 
 	cfgFile := filepath.Join(dir, "config.yaml")
 	_ = os.WriteFile(cfgFile, []byte("port: 3000\napp_name: default\n"), 0600)
 
-	os.Setenv("PORT", "9090")
-	defer os.Unsetenv("PORT")
+	if err := os.Setenv("PORT", "9090"); err != nil {
+		fmt.Println("setenv:", err)
+		return
+	}
+	defer func() { _ = os.Unsetenv("PORT") }()
 
 	var cfg AppConfig
 	if err := config.NewViper(&cfg, cfgFile); err != nil {

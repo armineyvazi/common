@@ -21,9 +21,8 @@ func ExampleNew() {
 	})
 	defer db.Close()
 
-	// Adapter satisfies both ports.Database and ports.GORMMigrator.
+	// Adapter satisfies ports.Database (GORMMigrator embeds it).
 	var _ ports.Database = db
-	var _ ports.GORMMigrator = db
 
 	// Define GORM models inline or import them from your domain package.
 	type User struct {
@@ -78,7 +77,7 @@ func ExampleNewSQL() {
 			SSLMode:         "require",
 		},
 	)
-	defer sqlDB.Close()
+	defer func() { _ = sqlDB.Close() }()
 
 	ctx := context.Background()
 	if err := sqlDB.Ping(ctx); err != nil {
@@ -99,7 +98,7 @@ func ExampleNewSQLFromParts() {
 		"localhost", "mydb", "app", "p@$$w0rd", 5432,
 		postgres.SQLConfig{SSLMode: "require"},
 	)
-	defer sqlDB.Close()
+	defer func() { _ = sqlDB.Close() }()
 
 	db := sqlDB.GetDB() // hand to sqlc queries
 	_ = db

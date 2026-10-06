@@ -35,14 +35,14 @@ func ExampleNewPostgres() {
 		fmt.Println("open:", err)
 		return
 	}
-	defer db.Close()
+	defer func() { _ = db.Close() }()
 
 	m, err := dbmigrate.NewPostgres(db, pgMigrationsFS, "testdata/postgres/migrations")
 	if err != nil {
 		fmt.Println("migrator:", err)
 		return
 	}
-	defer m.Close()
+	defer func() { _ = m.Close() }()
 
 	// Up applies all pending migrations. Returns nil when already at latest.
 	if err := m.Up(); err != nil {
@@ -61,14 +61,14 @@ func ExampleNewMySQL() {
 		fmt.Println("open:", err)
 		return
 	}
-	defer db.Close()
+	defer func() { _ = db.Close() }()
 
 	m, err := dbmigrate.NewMySQL(db, mysqlMigrationsFS, "testdata/mysql/migrations")
 	if err != nil {
 		fmt.Println("migrator:", err)
 		return
 	}
-	defer m.Close()
+	defer func() { _ = m.Close() }()
 
 	if err := m.Up(); err != nil {
 		fmt.Println("up:", err)
@@ -79,14 +79,14 @@ func ExampleNewMySQL() {
 // a controlled deploy rollback.
 func ExampleMigrator_Steps() {
 	db, _ := sql.Open("pgx", "postgres://app:secret@localhost:5432/mydb?sslmode=require")
-	defer db.Close()
+	defer func() { _ = db.Close() }()
 
 	m, err := dbmigrate.NewPostgres(db, pgMigrationsFS, "testdata/postgres/migrations")
 	if err != nil {
 		fmt.Println("migrator:", err)
 		return
 	}
-	defer m.Close()
+	defer func() { _ = m.Close() }()
 
 	// Roll back one version.
 	if err := m.Steps(-1); err != nil {
@@ -104,13 +104,13 @@ func ExampleMigrator_Steps() {
 // manually fixing a failed migration's side effects in the database.
 func ExampleMigrator_Force() {
 	db, _ := sql.Open("pgx", "postgres://app:secret@localhost:5432/mydb?sslmode=require")
-	defer db.Close()
+	defer func() { _ = db.Close() }()
 
 	m, err := dbmigrate.NewPostgres(db, pgMigrationsFS, "testdata/postgres/migrations")
 	if err != nil {
 		return
 	}
-	defer m.Close()
+	defer func() { _ = m.Close() }()
 
 	_, dirty, _ := m.Version()
 	if dirty {

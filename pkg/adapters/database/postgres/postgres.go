@@ -31,7 +31,8 @@ type postgresDB struct {
 
 // New creates a new PostgreSQL adapter. The connection is established lazily
 // on the first call to GetConnection.
-func New(host, database, user, password string, port int, config Config) ports.Database {
+// The returned value satisfies both ports.Database and ports.GORMMigrator.
+func New(host, database, user, password string, port int, config Config) ports.GORMMigrator {
 	dsn := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%d sslmode=disable TimeZone=UTC",
 		host, user, password, database, port,
@@ -40,7 +41,8 @@ func New(host, database, user, password string, port int, config Config) ports.D
 }
 
 // NewWithDSN creates a new PostgreSQL adapter from a full DSN string.
-func NewWithDSN(dsn string, config Config) ports.Database {
+// The returned value satisfies both ports.Database and ports.GORMMigrator.
+func NewWithDSN(dsn string, config Config) ports.GORMMigrator {
 	return &postgresDB{dsn: dsn, config: config}
 }
 
@@ -73,6 +75,13 @@ func (p *postgresDB) GetConnection(ctx context.Context) *gorm.DB {
 		}
 	})
 	return p.db.WithContext(ctx)
+}
+
+// AutoMigrate implements ports.GORMMigrator. It creates missing tables and
+// adds missing columns for the provided model types. It never drops columns
+// or tables. Prefer versioned SQL migrations in production.
+func (p *postgresDB) AutoMigrate(models ...any) error {
+	return p.GetConnection(context.Background()).AutoMigrate(models...)
 }
 
 func (p *postgresDB) Close() error {

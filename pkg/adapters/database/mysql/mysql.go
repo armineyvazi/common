@@ -25,7 +25,10 @@ type Config struct {
 	PrepareStmt bool
 }
 
-func New(host, database, user, password, charset string, config Config) ports.Database {
+// New creates a new MySQL adapter. The connection is established lazily
+// on the first call to GetConnection.
+// The returned value satisfies both ports.Database and ports.GORMMigrator.
+func New(host, database, user, password, charset string, config Config) ports.GORMMigrator {
 	return &Mysql{
 		address: createDSN(host, database, user, password, charset),
 		config: Config{
@@ -71,6 +74,13 @@ func (m *Mysql) IsHealthy(ctx context.Context) bool {
 	m.GetConnection(ctx)
 	db, err := m.db.DB()
 	return err == nil && db.PingContext(ctx) == nil
+}
+
+// AutoMigrate implements ports.GORMMigrator. It creates missing tables and
+// adds missing columns for the provided model types. It never drops columns
+// or tables. Prefer versioned SQL migrations in production.
+func (m *Mysql) AutoMigrate(models ...any) error {
+	return m.GetConnection(context.Background()).AutoMigrate(models...)
 }
 
 func (m *Mysql) Close() error {

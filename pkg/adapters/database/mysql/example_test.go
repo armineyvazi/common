@@ -45,7 +45,7 @@ func ExampleNew() {
 // ExampleNew_multiModel shows migrating several models in one call.
 func ExampleNew_multiModel() {
 	db := mysql.New("localhost:3306", "shop", "app", "secret", "charset=utf8mb4", mysql.Config{})
-	defer db.Close()
+	defer func() { _ = db.Close() }()
 
 	type Category struct {
 		ID   uint   `gorm:"primaryKey"`

@@ -5,6 +5,7 @@ on:
     branches: [main, master]
   pull_request:
     branches: [main, master]
+  workflow_call:  # allows release.yml to reuse this workflow as a CI gate
 
 jobs:
   test:

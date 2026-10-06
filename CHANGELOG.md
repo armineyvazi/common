@@ -1,0 +1,42 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+---
+
+## [Unreleased]
+
+### Added
+- `ports.GORMMigrator` interface — superset of `ports.Database` that exposes `AutoMigrate`
+- GORM `AutoMigrate` on postgres and mysql adapters (idempotent; never drops columns)
+- `pkg/adapters/database/migrate` — versioned SQL migrations via `golang-migrate/migrate/v4`
+  - `NewPostgres` / `NewMySQL` — driver-agnostic constructors accepting `*sql.DB`
+  - `Up`, `Down`, `Steps`, `Version`, `Force`, `Close` — full migration lifecycle
+  - Embed-friendly: accepts any `fs.FS` (use `//go:embed` for zero-config deploys)
+- Runnable `Example*` functions for every adapter package
+- `CGO_ENABLED=1` in CI for `confluent-kafka-go/v2` (wraps librdkafka)
+
+### Changed
+- `postgres.New` / `postgres.NewWithDSN` return `ports.GORMMigrator` (backward-compatible superset)
+- `mysql.New` returns `ports.GORMMigrator` (backward-compatible superset)
+
+---
+
+## [0.1.0] - 2024-09-20
+
+### Added
+- Initial release
+- Adapter packages: config, cache/redis_v9, database/postgres, database/mysql,
+  encoder/optimus, errorUtil/appErr, errorUtil/httpError, graphql/graphqlgo,
+  grpcServer, httpServer/fiber, json/goccy, logger/zap, memory/ttlcache,
+  messageBroker/confluent, messageBroker/kafka, messageBroker/rabbitmq, uuid, workerpool
+- `ports` package with core interfaces: Database, Cache, Logger, MessageBroker, …
+- GitHub Actions CI: unit tests, race detector, coverage, integration tests, golangci-lint
+
+---
+
+[Unreleased]: https://github.com/armineyvazi/common.git/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/armineyvazi/common.git/releases/tag/v0.1.0

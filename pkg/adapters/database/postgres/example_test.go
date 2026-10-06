@@ -19,7 +19,7 @@ func ExampleNew() {
 		ConnMaxIdleTime: 5 * time.Minute,
 		PrepareStmt:     true,
 	})
-	defer db.Close()
+	defer func() { _ = db.Close() }()
 
 	// Adapter satisfies ports.Database (GORMMigrator embeds it).
 	var _ ports.Database = db
@@ -53,7 +53,7 @@ func ExampleNew() {
 func ExampleNewWithDSN() {
 	dsn := "host=localhost user=app password=secret dbname=mydb port=5432 sslmode=require TimeZone=UTC"
 	db := postgres.NewWithDSN(dsn, postgres.Config{PrepareStmt: true})
-	defer db.Close()
+	defer func() { _ = db.Close() }()
 
 	type Product struct {
 		ID    uint   `gorm:"primaryKey"`

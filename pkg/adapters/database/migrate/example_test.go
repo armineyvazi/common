@@ -22,10 +22,10 @@ import (
 //	var migrationsFS embed.FS
 
 //go:embed testdata/postgres/migrations
-var pgMigrationsFS embed.FS
+var exPGMigrationsFS embed.FS
 
 //go:embed testdata/mysql/migrations
-var mysqlMigrationsFS embed.FS
+var exMySQLMigrationsFS embed.FS
 
 // ExampleNewPostgres shows the recommended production pattern for sqlc
 // projects: embed versioned SQL files and apply them before starting the app.
@@ -37,7 +37,7 @@ func ExampleNewPostgres() {
 	}
 	defer func() { _ = db.Close() }()
 
-	m, err := dbmigrate.NewPostgres(db, pgMigrationsFS, "testdata/postgres/migrations")
+	m, err := dbmigrate.NewPostgres(db, exPGMigrationsFS, "testdata/postgres/migrations")
 	if err != nil {
 		fmt.Println("migrator:", err)
 		return
@@ -63,7 +63,7 @@ func ExampleNewMySQL() {
 	}
 	defer func() { _ = db.Close() }()
 
-	m, err := dbmigrate.NewMySQL(db, mysqlMigrationsFS, "testdata/mysql/migrations")
+	m, err := dbmigrate.NewMySQL(db, exMySQLMigrationsFS, "testdata/mysql/migrations")
 	if err != nil {
 		fmt.Println("migrator:", err)
 		return
@@ -81,7 +81,7 @@ func ExampleMigrator_Steps() {
 	db, _ := sql.Open("pgx", "postgres://app:secret@localhost:5432/mydb?sslmode=require")
 	defer func() { _ = db.Close() }()
 
-	m, err := dbmigrate.NewPostgres(db, pgMigrationsFS, "testdata/postgres/migrations")
+	m, err := dbmigrate.NewPostgres(db, exPGMigrationsFS, "testdata/postgres/migrations")
 	if err != nil {
 		fmt.Println("migrator:", err)
 		return
@@ -106,7 +106,7 @@ func ExampleMigrator_Force() {
 	db, _ := sql.Open("pgx", "postgres://app:secret@localhost:5432/mydb?sslmode=require")
 	defer func() { _ = db.Close() }()
 
-	m, err := dbmigrate.NewPostgres(db, pgMigrationsFS, "testdata/postgres/migrations")
+	m, err := dbmigrate.NewPostgres(db, exPGMigrationsFS, "testdata/postgres/migrations")
 	if err != nil {
 		return
 	}

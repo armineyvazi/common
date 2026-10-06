@@ -19,7 +19,7 @@ func ExampleNew() {
 		"charset=utf8mb4",
 		mysql.Config{PrepareStmt: true},
 	)
-	defer db.Close()
+	defer func() { _ = db.Close() }()
 
 	// Adapter satisfies ports.Database (GORMMigrator embeds it).
 	var _ ports.Database = db

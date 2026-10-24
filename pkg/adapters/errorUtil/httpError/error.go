@@ -3,8 +3,8 @@ package httpError
 import (
 	"encoding/json"
 
-	app_err "github.com/armineyvazi/common.git/pkg/adapters/errorUtil/appErr"
-	"github.com/armineyvazi/common.git/pkg/ports"
+	app_err "github.com/armineyvazi/common/pkg/adapters/errorUtil/appErr"
+	"github.com/armineyvazi/common/pkg/ports"
 )
 
 type httpErr struct {

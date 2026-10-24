@@ -8,7 +8,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/armineyvazi/common.git/pkg/adapters/graphql/graphqlgo"
+	"github.com/armineyvazi/common/pkg/adapters/graphql/graphqlgo"
 )
 
 const testSchema = `

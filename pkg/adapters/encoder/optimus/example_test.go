@@ -3,7 +3,7 @@ package optimus_test
 import (
 	"fmt"
 
-	"github.com/armineyvazi/common.git/pkg/adapters/encoder/optimus"
+	"github.com/armineyvazi/common/pkg/adapters/encoder/optimus"
 )
 
 // ExampleNewOptimusEncoder shows encoding and decoding a database row ID.

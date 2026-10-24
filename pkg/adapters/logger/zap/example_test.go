@@ -3,8 +3,8 @@ package zap_test
 import (
 	"context"
 
-	"github.com/armineyvazi/common.git/pkg/adapters/logger/zap"
-	"github.com/armineyvazi/common.git/pkg/ports"
+	"github.com/armineyvazi/common/pkg/adapters/logger/zap"
+	"github.com/armineyvazi/common/pkg/ports"
 )
 
 // ExampleNew shows constructing a production-grade structured logger and
@@ -16,8 +16,9 @@ func ExampleNew() {
 	// context will include the trace_id field automatically.
 	ctx := context.WithValue(context.Background(), ports.TraceID{}, "req-abc-123")
 
-	log.Info(ctx, "server started", "addr", ":8080")
-	log.Debug(ctx, "debug message") // omitted at Info level
+	log.Infow(ctx, "server started", "addr", ":8080") // structured fields
+	log.Info(ctx, "listening on %s", ":8080")         // printf-style
+	log.Debug(ctx, "debug message")                   // omitted at Info level
 }
 
 // ExampleNew_withSentry shows wiring a Sentry-backed error handler so that
@@ -29,7 +30,7 @@ func ExampleNew_withSentry() {
 	log := zap.New(ports.Error, nil)
 
 	ctx := context.Background()
-	log.Error(ctx, "payment gateway unreachable", "attempt", 3)
+	log.Errorw(ctx, "payment gateway unreachable", "attempt", 3)
 }
 
 // ExampleNew_levels shows that only messages at or above the configured level

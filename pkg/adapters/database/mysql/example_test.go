@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/armineyvazi/common.git/pkg/adapters/database/mysql"
-	"github.com/armineyvazi/common.git/pkg/ports"
+	"github.com/armineyvazi/common/pkg/adapters/database/mysql"
+	"github.com/armineyvazi/common/pkg/ports"
 )
 
 // ExampleNew shows constructing a GORM MySQL adapter and running AutoMigrate

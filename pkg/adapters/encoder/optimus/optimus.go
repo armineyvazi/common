@@ -1,7 +1,7 @@
 package optimus
 
 import (
-	"github.com/armineyvazi/common.git/pkg/ports"
+	"github.com/armineyvazi/common/pkg/ports"
 	opPrime "github.com/pjebs/optimus-go"
 )
 

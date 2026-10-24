@@ -4,8 +4,8 @@ import (
 	"crypto/rsa"
 	"fmt"
 
-	"github.com/armineyvazi/common.git/pkg/adapters/errorUtil/appErr"
-	"github.com/armineyvazi/common.git/pkg/ports"
+	"github.com/armineyvazi/common/pkg/adapters/errorUtil/appErr"
+	"github.com/armineyvazi/common/pkg/ports"
 	"github.com/gofiber/fiber/v2"
 )
 

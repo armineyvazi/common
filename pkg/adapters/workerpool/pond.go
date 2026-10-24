@@ -6,7 +6,7 @@ import (
 	"github.com/alitto/pond"
 	"github.com/go-errors/errors"
 
-	"github.com/armineyvazi/common.git/pkg/ports"
+	"github.com/armineyvazi/common/pkg/ports"
 )
 
 const PondWorkerPoolName = "pond"

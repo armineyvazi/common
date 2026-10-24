@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/armineyvazi/common.git/pkg/ports"
+	"github.com/armineyvazi/common/pkg/ports"
 )
 
 func TestNewAppError(t *testing.T) {

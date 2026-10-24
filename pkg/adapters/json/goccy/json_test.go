@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/armineyvazi/common.git/pkg/adapters/json/goccy"
+	"github.com/armineyvazi/common/pkg/adapters/json/goccy"
 )
 
 func TestCodec_MarshalUnmarshal(t *testing.T) {

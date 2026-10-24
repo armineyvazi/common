@@ -5,8 +5,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/armineyvazi/common.git/pkg/adapters/errorUtil/appErr"
-	"github.com/armineyvazi/common.git/pkg/ports"
+	"github.com/armineyvazi/common/pkg/adapters/errorUtil/appErr"
+	"github.com/armineyvazi/common/pkg/ports"
 )
 
 func TestMapToHttpErr_UnknownError(t *testing.T) {

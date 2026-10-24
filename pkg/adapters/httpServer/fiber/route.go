@@ -1,6 +1,6 @@
 package fiber
 
-import "github.com/armineyvazi/common.git/pkg/ports"
+import "github.com/armineyvazi/common/pkg/ports"
 
 func (fh *FiberHttpServer) SetRouteGroups(groupName string, middlewares []func(ctx *ports.HttpContext) error, routes []ports.Route) {
 	g := fh.app.Group("/" + groupName)

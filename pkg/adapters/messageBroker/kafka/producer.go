@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/IBM/sarama"
-	"github.com/armineyvazi/common.git/pkg/ports"
+	"github.com/armineyvazi/common/pkg/ports"
 )
 
 type kafkaProducer struct {

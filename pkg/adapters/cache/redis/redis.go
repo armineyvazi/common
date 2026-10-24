@@ -12,7 +12,7 @@ import (
 	goredis "github.com/go-redis/redis"
 	"go.elastic.co/apm/module/apmgoredis/v2"
 
-	"github.com/armineyvazi/common.git/pkg/ports"
+	"github.com/armineyvazi/common/pkg/ports"
 )
 
 // Redis wraps a go-redis v6 client with APM tracing.

@@ -1,6 +1,6 @@
 package appErr
 
-import "github.com/armineyvazi/common.git/pkg/ports"
+import "github.com/armineyvazi/common/pkg/ports"
 
 func (e *appErr) IsType(errType ports.ErrorType) bool {
 	return e.GetType() == errType

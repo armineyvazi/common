@@ -8,8 +8,8 @@ import (
 
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 
-	"github.com/armineyvazi/common.git/pkg/adapters/messageBroker/confluent"
-	"github.com/armineyvazi/common.git/pkg/ports"
+	"github.com/armineyvazi/common/pkg/adapters/messageBroker/confluent"
+	"github.com/armineyvazi/common/pkg/ports"
 )
 
 func TestNewConsumer_MissingGroupID_ReturnsError(t *testing.T) {

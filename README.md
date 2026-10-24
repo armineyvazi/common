@@ -74,7 +74,7 @@ A shared Go infrastructure library that provides production-ready adapters for c
 ## Installation
 
 ```bash
-go get github.com/armineyvazi/common.git
+go get github.com/armineyvazi/common
 ```
 
 ---
@@ -136,7 +136,7 @@ Callers import only `pkg/ports`. Adapters are wired at the application's composi
 ### Redis Cache
 
 ```go
-import "github.com/armineyvazi/common.git/pkg/adapters/cache/redis_v9"
+import "github.com/armineyvazi/common/pkg/adapters/cache/redis_v9"
 
 cache := redis_v9.New("localhost:6379", "", 0)
 
@@ -153,7 +153,7 @@ val, err := cache.Get(ctx, "session:42")
 `postgres.New` returns `ports.GORMMigrator`, a superset of `ports.Database` that adds `AutoMigrate`.
 
 ```go
-import "github.com/armineyvazi/common.git/pkg/adapters/database/postgres"
+import "github.com/armineyvazi/common/pkg/adapters/database/postgres"
 
 db := postgres.New("localhost", "mydb", "user", "pass", 5432, postgres.Config{
     MaxOpenConns:    25,
@@ -198,7 +198,7 @@ db := postgres.NewWithDSN(
 Use this adapter when consuming `*sql.DB` directly or with sqlc-generated code.
 
 ```go
-import "github.com/armineyvazi/common.git/pkg/adapters/database/postgres"
+import "github.com/armineyvazi/common/pkg/adapters/database/postgres"
 
 sqlDB := postgres.NewSQL(postgres.SQLConfig{
     Host:     "localhost",
@@ -220,7 +220,7 @@ rawDB := sqlDB.GetDB() // *sql.DB
 ### MySQL — GORM + AutoMigrate
 
 ```go
-import "github.com/armineyvazi/common.git/pkg/adapters/database/mysql"
+import "github.com/armineyvazi/common/pkg/adapters/database/mysql"
 
 db := mysql.New("localhost:3306", "mydb", "user", "pass", "charset=utf8mb4", mysql.Config{
     PrepareStmt: true,
@@ -245,7 +245,7 @@ gormDB := db.GetConnection(ctx)
 ### MySQL — raw SQL (sqlc)
 
 ```go
-import "github.com/armineyvazi/common.git/pkg/adapters/database/mysql"
+import "github.com/armineyvazi/common/pkg/adapters/database/mysql"
 
 sqlDB := mysql.NewSQL(mysql.SQLConfig{
     Host:      "localhost:3306",
@@ -282,7 +282,7 @@ import (
     "database/sql"
     "embed"
 
-    dbmigrate "github.com/armineyvazi/common.git/pkg/adapters/database/migrate"
+    dbmigrate "github.com/armineyvazi/common/pkg/adapters/database/migrate"
     _ "github.com/jackc/pgx/v5/stdlib" // pgx driver
 )
 
@@ -345,7 +345,7 @@ if dirty {
 Requires `CGO_ENABLED=1` (wraps librdkafka). Supports SASL/PLAIN, SASL/SSL, and plain-text brokers.
 
 ```go
-import "github.com/armineyvazi/common.git/pkg/adapters/messageBroker/confluent"
+import "github.com/armineyvazi/common/pkg/adapters/messageBroker/confluent"
 
 // Producer
 p, err := confluent.NewProducer(logger, confluent.ProducerConfig{
@@ -390,7 +390,7 @@ for msg := range msgs {
 ### Kafka (Sarama)
 
 ```go
-import "github.com/armineyvazi/common.git/pkg/adapters/messageBroker/kafka"
+import "github.com/armineyvazi/common/pkg/adapters/messageBroker/kafka"
 
 producer := kafka.NewProducer(logger, "broker1:9092,broker2:9092", "user", "pass")
 producer.Produce("orders", []byte(`{"event":"order_created","id":1}`))
@@ -410,7 +410,7 @@ for msg := range msgs {
 ### RabbitMQ
 
 ```go
-import "github.com/armineyvazi/common.git/pkg/adapters/messageBroker/rabbitmq"
+import "github.com/armineyvazi/common/pkg/adapters/messageBroker/rabbitmq"
 
 producer, err := rabbitmq.NewProducer("amqp://guest:guest@localhost:5672/")
 if err != nil {
@@ -449,7 +449,7 @@ for d := range deliveries {
 
 ```go
 import (
-    grpcserver "github.com/armineyvazi/common.git/pkg/adapters/grpcServer"
+    grpcserver "github.com/armineyvazi/common/pkg/adapters/grpcServer"
     pb "your/module/gen/proto"
 )
 
@@ -474,7 +474,7 @@ The adapter installs unary + stream panic recovery interceptors (returns `INTERN
 No code generation required. Pass the SDL schema string and a resolver struct.
 
 ```go
-import "github.com/armineyvazi/common.git/pkg/adapters/graphql/graphqlgo"
+import "github.com/armineyvazi/common/pkg/adapters/graphql/graphqlgo"
 
 const schema = `
     type Query {
@@ -502,9 +502,9 @@ http.Handle("/graphql", srv.Handler())
 
 ```go
 import (
-    fiberserver "github.com/armineyvazi/common.git/pkg/adapters/httpServer/fiber"
-    "github.com/armineyvazi/common.git/pkg/adapters/uuid"
-    "github.com/armineyvazi/common.git/pkg/ports"
+    fiberserver "github.com/armineyvazi/common/pkg/adapters/httpServer/fiber"
+    "github.com/armineyvazi/common/pkg/adapters/uuid"
+    "github.com/armineyvazi/common/pkg/ports"
 )
 
 uuidGen := uuid.New()
@@ -526,6 +526,20 @@ if err := server.Listen(); err != nil {
 }
 ```
 
+The last argument (`nil` above) is an optional `ports.ErrorHandler` such as a Sentry reporter; `nil` disables error reporting.
+
+**Production settings.** Every constructor accepts functional options for the underlying `fiber.Config`. Without timeouts, a slow client can hold a connection open indefinitely, so set them for any internet-facing server:
+
+```go
+server := fiberserver.NewFiberWithErrorModel(false, logger, ":8080", uuidGen, nil,
+    fiberserver.WithTimeouts(15*time.Second, 30*time.Second, 60*time.Second), // read, write, idle
+    fiberserver.WithBodyLimit(1<<20),                                          // 1 MiB; larger bodies get 413
+    fiberserver.WithoutStartupMessage(),
+)
+```
+
+`WithFiberConfig(func(*fiber.Config))` covers any other setting.
+
 ---
 
 ### JSON Codec
@@ -533,7 +547,7 @@ if err := server.Listen(); err != nil {
 `goccy/go-json` is API-compatible with `encoding/json` and typically 2–3× faster.
 
 ```go
-import "github.com/armineyvazi/common.git/pkg/adapters/json/goccy"
+import "github.com/armineyvazi/common/pkg/adapters/json/goccy"
 
 codec := goccy.New() // implements ports.JSONCodec
 
@@ -556,14 +570,22 @@ _ = dec.Decode(&out)
 
 ```go
 import (
-    zaplogger "github.com/armineyvazi/common.git/pkg/adapters/logger/zap"
-    "github.com/armineyvazi/common.git/pkg/ports"
+    zaplogger "github.com/armineyvazi/common/pkg/adapters/logger/zap"
+    "github.com/armineyvazi/common/pkg/ports"
 )
 
 logger := zaplogger.New(ports.Info, nil) // nil = no Sentry integration
-logger.Info(ctx, "request completed", "method", "GET", "path", "/users", "latency_ms", 12)
-logger.Error(ctx, "database error", "err", err, "table", "users")
+
+// Structured: key-value pairs become separate JSON fields.
+logger.Infow(ctx, "request completed", "method", "GET", "path", "/users", "latency_ms", 12)
+logger.Errorw(ctx, "database error", "err", err, "table", "users")
+
+// Printf-style: params are format arguments. Never pass untrusted data as
+// the format string; use "%s".
+logger.Info(ctx, "listening on %s", addr)
 ```
+
+`Debugw`, `Infow`, `Warnw` and `Errorw` are structured; `Debug`, `Info`, `Warn`, `Error` and `Panic` are printf-style.
 
 Attach a trace ID to the context to include it in every log line:
 
@@ -580,7 +602,7 @@ Generic TTL cache backed by `jellydator/ttlcache`.
 
 ```go
 import (
-    memcache "github.com/armineyvazi/common.git/pkg/adapters/memory/ttlcache"
+    memcache "github.com/armineyvazi/common/pkg/adapters/memory/ttlcache"
     "github.com/jellydator/ttlcache/v3"
 )
 
@@ -601,7 +623,7 @@ if item := cache.Get("user:42"); item != nil {
 ### Worker Pool
 
 ```go
-import workerpool "github.com/armineyvazi/common.git/pkg/adapters/workerpool"
+import workerpool "github.com/armineyvazi/common/pkg/adapters/workerpool"
 
 pool := workerpool.New(logger)
 
@@ -628,8 +650,8 @@ r := <-results
 
 ```go
 import (
-    "github.com/armineyvazi/common.git/pkg/adapters/errorUtil/appErr"
-    "github.com/armineyvazi/common.git/pkg/adapters/errorUtil/httpError"
+    "github.com/armineyvazi/common/pkg/adapters/errorUtil/appErr"
+    "github.com/armineyvazi/common/pkg/adapters/errorUtil/httpError"
 )
 
 err := appErr.NewNotFoundErr(errors.New("user row missing")).
@@ -649,7 +671,7 @@ if appErr.IsErrorType(err, ports.TypeDuplicate) { ... }
 ### Config
 
 ```go
-import "github.com/armineyvazi/common.git/pkg/adapters/config"
+import "github.com/armineyvazi/common/pkg/adapters/config"
 
 type AppConfig struct {
     Port     int    `mapstructure:"port"`

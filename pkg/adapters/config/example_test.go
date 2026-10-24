@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/armineyvazi/common.git/pkg/adapters/config"
+	"github.com/armineyvazi/common/pkg/adapters/config"
 )
 
 // AppConfig is a typical application configuration struct. Field names are

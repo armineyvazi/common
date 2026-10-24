@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/armineyvazi/common.git/pkg/adapters/memory/ttlcache"
+	"github.com/armineyvazi/common/pkg/adapters/memory/ttlcache"
 )
 
 // ExampleNew_stringCache shows a typed string-keyed, string-valued cache

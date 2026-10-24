@@ -11,7 +11,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/jackc/pgx/v5/stdlib"
 
-	dbmigrate "github.com/armineyvazi/common.git/pkg/adapters/database/migrate"
+	dbmigrate "github.com/armineyvazi/common/pkg/adapters/database/migrate"
 )
 
 //go:embed testdata/postgres/migrations

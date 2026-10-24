@@ -1,7 +1,7 @@
 package uuid
 
 import (
-	"github.com/armineyvazi/common.git/pkg/ports"
+	"github.com/armineyvazi/common/pkg/ports"
 	"github.com/google/uuid"
 )
 

@@ -1,6 +1,6 @@
 package appErr
 
-import "github.com/armineyvazi/common.git/pkg/ports"
+import "github.com/armineyvazi/common/pkg/ports"
 
 func HandleError(err error) ports.AppError {
 	if err == nil {

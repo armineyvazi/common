@@ -5,8 +5,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/armineyvazi/common.git/pkg/adapters/encoder/optimus"
-	"github.com/armineyvazi/common.git/pkg/ports"
+	"github.com/armineyvazi/common/pkg/adapters/encoder/optimus"
+	"github.com/armineyvazi/common/pkg/ports"
 )
 
 type appErr struct {

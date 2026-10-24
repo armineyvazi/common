@@ -8,7 +8,7 @@ import (
 	"github.com/redis/go-redis/v9"
 	"time"
 
-	"github.com/armineyvazi/common.git/pkg/ports"
+	"github.com/armineyvazi/common/pkg/ports"
 )
 
 type Redis struct {

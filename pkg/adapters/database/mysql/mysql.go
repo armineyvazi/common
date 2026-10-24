@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/armineyvazi/common.git/pkg/ports"
+	"github.com/armineyvazi/common/pkg/ports"
 
 	mysql "go.elastic.co/apm/module/apmgormv2/v2/driver/mysql"
 	"gorm.io/gorm"

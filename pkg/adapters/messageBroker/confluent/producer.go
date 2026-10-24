@@ -7,7 +7,7 @@ import (
 
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 
-	"github.com/armineyvazi/common.git/pkg/ports"
+	"github.com/armineyvazi/common/pkg/ports"
 )
 
 // Producer wraps a confluent-kafka-go async producer and implements

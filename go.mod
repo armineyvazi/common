@@ -1,4 +1,4 @@
-module github.com/armineyvazi/common.git
+module github.com/armineyvazi/common
 
 go 1.26.2
 

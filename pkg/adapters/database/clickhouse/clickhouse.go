@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/armineyvazi/common.git/pkg/ports"
+	"github.com/armineyvazi/common/pkg/ports"
 	"gorm.io/driver/clickhouse"
 	"gorm.io/gorm"
 )

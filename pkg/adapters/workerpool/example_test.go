@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/armineyvazi/common.git/pkg/adapters/workerpool"
-	"github.com/armineyvazi/common.git/pkg/ports"
+	"github.com/armineyvazi/common/pkg/adapters/workerpool"
+	"github.com/armineyvazi/common/pkg/ports"
 )
 
 // silentLogger satisfies ports.Logger without producing any output.

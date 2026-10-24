@@ -3,8 +3,8 @@ package postgres_test
 import (
 	"testing"
 
-	"github.com/armineyvazi/common.git/pkg/adapters/database/postgres"
-	"github.com/armineyvazi/common.git/pkg/ports"
+	"github.com/armineyvazi/common/pkg/adapters/database/postgres"
+	"github.com/armineyvazi/common/pkg/ports"
 )
 
 // TestPostgresDB_ImplementsGORMMigrator verifies at compile time that the

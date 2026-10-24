@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/armineyvazi/common.git/pkg/ports"
+	"github.com/armineyvazi/common/pkg/ports"
 )
 
 // BenchmarkWorkerPool_Throughput measures end-to-end job dispatch and result

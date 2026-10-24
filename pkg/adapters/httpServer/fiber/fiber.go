@@ -7,13 +7,13 @@ import (
 	"strings"
 	"time"
 
-	app_err "github.com/armineyvazi/common.git/pkg/adapters/errorUtil/appErr"
-	"github.com/armineyvazi/common.git/pkg/adapters/errorUtil/httpError"
+	app_err "github.com/armineyvazi/common/pkg/adapters/errorUtil/appErr"
+	"github.com/armineyvazi/common/pkg/adapters/errorUtil/httpError"
 	"github.com/gofiber/fiber/v2/middleware/pprof"
 	"github.com/gofiber/template/html/v2"
 
-	"github.com/armineyvazi/common.git/pkg/adapters/httpServer/fiber/middleware/jwt"
-	"github.com/armineyvazi/common.git/pkg/ports"
+	"github.com/armineyvazi/common/pkg/adapters/httpServer/fiber/middleware/jwt"
+	"github.com/armineyvazi/common/pkg/ports"
 	sentryfiber "github.com/getsentry/sentry-go/fiber"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -40,7 +40,7 @@ func (fh *FiberHttpServer) ActiveRecover() {
 	fh.app.Use(recover.New())
 }
 
-func NewFiberWithRenderHtml(debug bool, address string, uuidGen ports.UUID, sentry ports.ErrorHandler, view View) ports.HttpServer {
+func NewFiberWithRenderHtml(debug bool, address string, uuidGen ports.UUID, sentry ports.ErrorHandler, view View, opts ...Option) ports.HttpServer {
 	if address == "" {
 		address = defaultAddress
 	}
@@ -48,7 +48,7 @@ func NewFiberWithRenderHtml(debug bool, address string, uuidGen ports.UUID, sent
 	engine := html.New(view.Dir, view.Extension)
 
 	return &FiberHttpServer{
-		app: fiber.New(fiber.Config{
+		app: newApp(fiber.Config{
 			ErrorHandler: func(ctx *fiber.Ctx, err error) error {
 				// save error in sentry
 				if sentry != nil {
@@ -74,20 +74,20 @@ func NewFiberWithRenderHtml(debug bool, address string, uuidGen ports.UUID, sent
 				return ctx.Status(ports.StatusInternalServerError).JSON(httpError.NewInternalServerErrorErr(err))
 			},
 			Views: engine,
-		}),
+		}, opts),
 		sentry:  sentry,
 		address: address,
 		uuidGen: uuidGen,
 	}
 }
 
-func New(debug bool, address string, uuidGen ports.UUID, sentry ports.ErrorHandler) ports.HttpServer {
+func New(debug bool, address string, uuidGen ports.UUID, sentry ports.ErrorHandler, opts ...Option) ports.HttpServer {
 	if address == "" {
 		address = defaultAddress
 	}
 
 	return &FiberHttpServer{
-		app: fiber.New(fiber.Config{
+		app: newApp(fiber.Config{
 			ErrorHandler: func(ctx *fiber.Ctx, err error) error {
 				// save error in sentry
 				if sentry != nil {
@@ -123,7 +123,7 @@ func New(debug bool, address string, uuidGen ports.UUID, sentry ports.ErrorHandl
 					NestedError: err,
 				})
 			},
-		}),
+		}, opts),
 		sentry:  sentry,
 		address: address,
 		uuidGen: uuidGen,
@@ -270,9 +270,10 @@ func NewFiberWithErrorModel(
 	address string,
 	uuidGen ports.UUID,
 	sentry ports.ErrorHandler,
+	opts ...Option,
 ) ports.HttpServer {
 	return &FiberHttpServer{
-		app: fiber.New(fiber.Config{
+		app: newApp(fiber.Config{
 			ErrorHandler: func(ctx *fiber.Ctx, err error) (e error) {
 				var appErr ports.AppError
 				var httpErr ports.HttpError
@@ -303,13 +304,14 @@ func NewFiberWithErrorModel(
 						appErr.WithTrackId(ctx.UserContext()))
 				}
 
-				if debug || !appErr.IsDebugDisabled() {
+				// sentry is optional: callers pass nil to disable reporting.
+				if sentry != nil && (debug || !appErr.IsDebugDisabled()) {
 					sentry.CaptureFiberException(ctx, httpErr, httpErr.GetMetaData(ctx), httpErr.GetExtraInfo())
 				}
 				return ctx.Status(httpErr.GetHttpStatus()).
 					JSON(httpErr)
 			},
-		}),
+		}, opts),
 		sentry:  sentry,
 		address: address,
 		uuidGen: uuidGen,

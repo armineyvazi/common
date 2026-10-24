@@ -9,7 +9,7 @@ import (
 
 	gomysql "github.com/go-sql-driver/mysql" // registers the "mysql" driver for database/sql
 
-	"github.com/armineyvazi/common.git/pkg/ports"
+	"github.com/armineyvazi/common/pkg/ports"
 )
 
 // MySQLSQLConfig configures the *sql.DB connection pool for the raw SQL adapter.

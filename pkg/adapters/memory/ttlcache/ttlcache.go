@@ -5,7 +5,7 @@ import (
 	"github.com/jellydator/ttlcache/v3"
 	"time"
 
-	"github.com/armineyvazi/common.git/pkg/ports"
+	"github.com/armineyvazi/common/pkg/ports"
 )
 
 type Memory[K comparable, V any] struct {

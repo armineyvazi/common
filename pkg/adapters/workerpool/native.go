@@ -3,7 +3,7 @@ package workerpool
 import (
 	"context"
 
-	"github.com/armineyvazi/common.git/pkg/ports"
+	"github.com/armineyvazi/common/pkg/ports"
 )
 
 type NativeWorkerpool struct {

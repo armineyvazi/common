@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/armineyvazi/common.git/pkg/adapters/errorUtil/appErr"
-	"github.com/armineyvazi/common.git/pkg/ports"
+	"github.com/armineyvazi/common/pkg/adapters/errorUtil/appErr"
+	"github.com/armineyvazi/common/pkg/ports"
 )
 
 // ExampleNewNotFoundErr shows how to create a typed not-found error and

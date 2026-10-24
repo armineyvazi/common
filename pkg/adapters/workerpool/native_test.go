@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/armineyvazi/common.git/pkg/ports"
+	"github.com/armineyvazi/common/pkg/ports"
 )
 
 type noopLogger struct{}

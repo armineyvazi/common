@@ -10,7 +10,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
-	grpcserver "github.com/armineyvazi/common.git/pkg/adapters/grpcServer"
+	grpcserver "github.com/armineyvazi/common/pkg/adapters/grpcServer"
 )
 
 // nopLogger satisfies ports.Logger without importing the full adapter stack.

@@ -7,7 +7,7 @@ import (
 
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 
-	"github.com/armineyvazi/common.git/pkg/adapters/messageBroker/confluent"
+	"github.com/armineyvazi/common/pkg/adapters/messageBroker/confluent"
 )
 
 // nopLogger satisfies ports.LoggerWithTraceID without importing the full adapter stack.
@@ -18,6 +18,8 @@ func (n *nopLogger) Info(ctx context.Context, msg string, params ...any)   {}
 func (n *nopLogger) Warn(ctx context.Context, msg string, params ...any)   {}
 func (n *nopLogger) Error(ctx context.Context, msg string, params ...any)  {}
 func (n *nopLogger) Panic(ctx context.Context, msg string, params ...any)  {}
+func (n *nopLogger) Debugw(ctx context.Context, msg string, params ...any) {}
+func (n *nopLogger) Infow(ctx context.Context, msg string, params ...any)  {}
 func (n *nopLogger) Errorw(ctx context.Context, msg string, params ...any) {}
 func (n *nopLogger) Warnw(ctx context.Context, msg string, params ...any)  {}
 func (n *nopLogger) Flush() error                                          { return nil }

@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/armineyvazi/common.git/pkg/adapters/database/postgres"
-	"github.com/armineyvazi/common.git/pkg/ports"
+	"github.com/armineyvazi/common/pkg/adapters/database/postgres"
+	"github.com/armineyvazi/common/pkg/ports"
 )
 
 // ExampleNew demonstrates constructing a GORM PostgreSQL adapter and running

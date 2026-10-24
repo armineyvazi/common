@@ -9,7 +9,7 @@ import (
 
 	"github.com/goccy/go-json"
 
-	"github.com/armineyvazi/common.git/pkg/ports"
+	"github.com/armineyvazi/common/pkg/ports"
 )
 
 // Codec implements ports.JSONCodec using goccy/go-json.

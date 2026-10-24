@@ -10,7 +10,7 @@ import (
 
 	"github.com/IBM/sarama"
 
-	"github.com/armineyvazi/common.git/pkg/ports"
+	"github.com/armineyvazi/common/pkg/ports"
 )
 
 type kafkaConsumer struct {

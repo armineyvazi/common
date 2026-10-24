@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	redis "github.com/armineyvazi/common.git/pkg/adapters/cache/redis_v9"
+	redis "github.com/armineyvazi/common/pkg/adapters/cache/redis_v9"
 )
 
 // ExampleNew_basicGetSet shows storing and retrieving a plain string value.

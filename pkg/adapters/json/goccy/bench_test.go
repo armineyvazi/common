@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/armineyvazi/common.git/pkg/adapters/json/goccy"
+	"github.com/armineyvazi/common/pkg/adapters/json/goccy"
 )
 
 type benchPayload struct {

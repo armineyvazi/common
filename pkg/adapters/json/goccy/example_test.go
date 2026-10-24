@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/armineyvazi/common.git/pkg/adapters/json/goccy"
+	"github.com/armineyvazi/common/pkg/adapters/json/goccy"
 )
 
 type event struct {

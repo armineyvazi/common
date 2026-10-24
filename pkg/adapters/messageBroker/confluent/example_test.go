@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/armineyvazi/common.git/pkg/adapters/messageBroker/confluent"
+	"github.com/armineyvazi/common/pkg/adapters/messageBroker/confluent"
 )
 
 // ExampleNewProducer shows constructing a Confluent Kafka producer and

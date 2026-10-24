@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/armineyvazi/common.git/pkg/ports"
+	"github.com/armineyvazi/common/pkg/ports"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -95,6 +95,24 @@ func (l *logger) Panic(ctx context.Context, msg string, params ...any) {
 	l.core.Panicw(fmt.Sprintf(msg, params...),
 		ports.SourceNameKey, source,
 		ports.TraceIDKey, traceID)
+}
+
+// Debugw logs msg at debug level with keysAndValues as structured fields.
+func (l *logger) Debugw(ctx context.Context, msg string, keysAndValues ...any) {
+	traceID := ctx.Value(ports.TraceID{})
+	source := ctx.Value(ports.SourceName{})
+	l.core.Debugw(msg, append(
+		keysAndValues, ports.SourceNameKey, source,
+		ports.TraceIDKey, traceID)...)
+}
+
+// Infow logs msg at info level with keysAndValues as structured fields.
+func (l *logger) Infow(ctx context.Context, msg string, keysAndValues ...any) {
+	traceID := ctx.Value(ports.TraceID{})
+	source := ctx.Value(ports.SourceName{})
+	l.core.Infow(msg, append(
+		keysAndValues, ports.SourceNameKey, source,
+		ports.TraceIDKey, traceID)...)
 }
 
 func (l *logger) Errorw(ctx context.Context, msg string, params ...any) {

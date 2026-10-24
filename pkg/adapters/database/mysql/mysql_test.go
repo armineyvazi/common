@@ -3,8 +3,8 @@ package mysql_test
 import (
 	"testing"
 
-	"github.com/armineyvazi/common.git/pkg/adapters/database/mysql"
-	"github.com/armineyvazi/common.git/pkg/ports"
+	"github.com/armineyvazi/common/pkg/adapters/database/mysql"
+	"github.com/armineyvazi/common/pkg/ports"
 )
 
 // TestMysql_ImplementsGORMMigrator is a compile-time assertion that the value

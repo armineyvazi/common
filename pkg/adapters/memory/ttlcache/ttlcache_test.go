@@ -8,7 +8,7 @@ import (
 
 	"github.com/jellydator/ttlcache/v3"
 
-	memcache "github.com/armineyvazi/common.git/pkg/adapters/memory/ttlcache"
+	memcache "github.com/armineyvazi/common/pkg/adapters/memory/ttlcache"
 )
 
 func TestSetAndGet(t *testing.T) {

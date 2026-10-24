@@ -11,6 +11,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.2.0] - 2026-10-24
+
+### Changed (breaking)
+- **Module path is now `github.com/armineyvazi/common`** (was
+  `github.com/armineyvazi/common.git`). The go command rejects a `.git`
+  suffix on github.com paths ("invalid version control suffix"), so v0.1.0
+  could not be fetched with `go get`. Update imports:
+  `sed -i 's#armineyvazi/common.git#armineyvazi/common#g'` on your sources.
+- `ports.LoggerWithTraceID` gains `Debugw` and `Infow`. Custom
+  implementations of the interface must add them.
+
+### Added
+- `Infow` / `Debugw` on the zap adapter: structured key-value logging at
+  info and debug level. Previously only `Warnw` / `Errorw` existed, and
+  key-value pairs passed to `Info` were rendered as `%!(EXTRA …)`.
+- Functional options for all Fiber constructors: `WithTimeouts`,
+  `WithBodyLimit`, `WithoutStartupMessage`, `WithFiberConfig`. Existing
+  call sites compile unchanged.
+
+### Fixed
+- `NewFiberWithErrorModel` panicked on the first failed request when the
+  error handler was `nil`, as shown in the README. A `nil` handler now
+  disables error reporting.
+- README logger example used printf-style `Info` with key-value pairs.
+
+---
+
 ## [0.1.0] - 2026-10-06
 
 ### Added
@@ -36,5 +63,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-[Unreleased]: https://github.com/armineyvazi/common.git/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/armineyvazi/common.git/releases/tag/v0.1.0
+[Unreleased]: https://github.com/armineyvazi/common/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/armineyvazi/common/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/armineyvazi/common/releases/tag/v0.1.0

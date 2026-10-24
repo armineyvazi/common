@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"regexp"
 
-	"github.com/armineyvazi/common.git/pkg/adapters/uuid"
+	"github.com/armineyvazi/common/pkg/adapters/uuid"
 )
 
 var uuidRegex = regexp.MustCompile(
